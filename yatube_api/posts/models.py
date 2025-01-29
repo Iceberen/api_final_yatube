@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import UniqueConstraint
 from django.core.exceptions import ValidationError
 
 from .constants import LEN_CHARFIELD
@@ -67,11 +68,16 @@ class Follow(models.Model):
     class Meta:
         verbose_name = 'Подписчик'
         verbose_name_plural = 'Подписчики'
-        unique_together = ('user', 'following')
+        constraints = [
+            UniqueConstraint(
+                fields=['user', 'following'],
+                name='user_following_unique',
+            ),
+        ]
+
+    def __str__(self):
+        return self.user
 
     def clean(self):
         if self.user == self.following:
             raise ValidationError()
-
-    def __str__(self):
-        return self.user

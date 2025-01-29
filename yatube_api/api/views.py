@@ -38,7 +38,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, post=post)
 
 
-class FollowViewSet(generics.ListCreateAPIView):
+class FollowCreateAPIView(generics.ListCreateAPIView):
     serializer_class = FollowSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('following__username',)
